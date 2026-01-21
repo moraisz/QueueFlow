@@ -1,0 +1,26 @@
+{
+    frankenphp
+}
+
+{$APP_DOMAIN} {
+    root * /app/public
+    encode zstd br gzip
+
+    php_server {
+        try_files {path} /index.php
+        root /app/public
+
+        worker {
+            file /app/public/index.php
+            watch
+        }
+    }
+
+    file_server
+
+    log {
+        output stdout
+        format json
+        level INFO
+    }
+}
