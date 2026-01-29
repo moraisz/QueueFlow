@@ -1,6 +1,6 @@
 <?php
 
-namespace Src\Infrastructure\Http;
+namespace Src\Core;
 
 use Src\Core\Container;
 

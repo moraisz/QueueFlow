@@ -2,12 +2,12 @@
 
 namespace Bootstrap;
 
-use Src\Infrastructure\Http\Request;
-use Src\Infrastructure\Http\Response;
+use Src\Core\Request;
+use Src\Core\Response;
 use Src\Core\Container;
 use Src\Contracts\Interfaces\Repositories\CustomerRepositoryInterface;
 use Src\Infrastructure\Repositories\CustomerMockRepository;
-use Src\Infrastructure\Http\Router;
+use Src\Core\Router;
 use Src\Infrastructure\Routers\CustomerRouter;
 
 class App

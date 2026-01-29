@@ -1,8 +1,9 @@
 <?php
 
-namespace Src\Infrastructure\Http;
+namespace Src\Core;
 
-class Response {
+class Response
+{
     private int $statusCode = 200;
     private array $headers = [];
     private string $content = '';
@@ -20,34 +21,41 @@ class Response {
         500 => 'Internal Server Error',
     ];
 
-    public function setStatusCode(int $code): self {
+    public function setStatusCode(int $code): self
+    {
         $this->statusCode = $code;
         return $this;
     }
 
-    public function getStatusCode(): int {
+    public function getStatusCode(): int
+    {
         return $this->statusCode;
     }
 
-    public function setHeader(string $name, string $value): self {
+    public function setHeader(string $name, string $value): self
+    {
         $this->headers[$name] = $value;
         return $this;
     }
 
-    public function getHeader(string $name): ?string {
+    public function getHeader(string $name): ?string
+    {
         return $this->headers[$name] ?? null;
     }
 
-    public function getHeaders(): array {
+    public function getHeaders(): array
+    {
         return $this->headers;
     }
 
-    public function setContent(string $content): self {
+    public function setContent(string $content): self
+    {
         $this->content = $content;
         return $this;
     }
 
-    public function getContent(): string {
+    public function getContent(): string
+    {
         return $this->content;
     }
 
@@ -57,40 +65,44 @@ class Response {
     * @param int|null $statusCode
     * @return self
     */
-    public function json(array|object|null $data, ?int $statusCode = null): self {
+    public function json(array|object|null $data, ?int $statusCode = null): self
+    {
         if ($statusCode !== null) {
             $this->setStatusCode($statusCode);
         }
 
         $this->setHeader('Content-Type', 'application/json');
         $this->setContent(json_encode($data, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
-        
+
         return $this;
     }
 
-    public function html(string $html, ?int $statusCode = null): self {
+    public function html(string $html, ?int $statusCode = null): self
+    {
         if ($statusCode !== null) {
             $this->setStatusCode($statusCode);
         }
 
         $this->setHeader('Content-Type', 'text/html; charset=utf-8');
         $this->setContent($html);
-        
+
         return $this;
     }
 
-    public function text(string $text, ?int $statusCode = null): self {
+    public function text(string $text, ?int $statusCode = null): self
+    {
         if ($statusCode !== null) {
             $this->setStatusCode($statusCode);
         }
 
         $this->setHeader('Content-Type', 'text/plain; charset=utf-8');
         $this->setContent($text);
-        
+
         return $this;
     }
 
-    public function send(): void {
+    public function send(): void
+    {
         if ($this->sent) {
             return;
         }
@@ -109,11 +121,13 @@ class Response {
         $this->sent = true;
     }
 
-    public function isSent(): bool {
+    public function isSent(): bool
+    {
         return $this->sent;
     }
 
-    public function getStatusText(): string {
+    public function getStatusText(): string
+    {
         return self::STATUS_TEXTS[$this->statusCode] ?? 'Unknown';
     }
 }

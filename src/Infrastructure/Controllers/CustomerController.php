@@ -2,10 +2,10 @@
 
 namespace Src\Infrastructure\Controllers;
 
+use Src\Core\Request;
+use Src\Core\Response;
+use Src\Core\View;
 use Src\Contracts\Interfaces\Repositories\CustomerRepositoryInterface;
-use Src\Infrastructure\Http\Request;
-use Src\Infrastructure\Http\Response;
-use Src\Infrastructure\Http\View;
 use Src\Application\UseCases\Customer\CreateCustomerUseCase;
 use Src\Application\UseCases\Customer\GetCustomerByIdUseCase;
 use Src\Application\UseCases\Customer\GetCustomersUseCase;
@@ -13,14 +13,8 @@ use Src\Contracts\DTOs\Customer\CustomerCreateDTO;
 
 class CustomerController
 {
-    /**
-     * Repositório injetado via construtor
-     */
     private CustomerRepositoryInterface $customerRepository;
 
-    /**
-     * Container injeta automaticamente as dependências
-     */
     public function __construct(CustomerRepositoryInterface $customerRepository)
     {
         $this->customerRepository = $customerRepository;

@@ -2,7 +2,7 @@
 
 namespace Src\Infrastructure\Routers;
 
-use Src\Infrastructure\Http\Router;
+use Src\Core\Router;
 use Src\Infrastructure\Controllers\CustomerController;
 
 class CustomerRouter

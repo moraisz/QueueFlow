@@ -1,6 +1,9 @@
-<?php 
+<?php
+
 namespace Src\Infrastructure\Views\layouts;
-use Src\Infrastructure\Http\View;
+
+use Src\Core\View;
+
 ?>
 
 <!DOCTYPE html>
