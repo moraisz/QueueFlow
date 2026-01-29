@@ -5,7 +5,8 @@ namespace Src\Infrastructure\Repositories;
 use Src\Application\Entities\CustomerEntity;
 use Src\Contracts\Interfaces\Repositories\CustomerRepositoryInterface;
 
-class MockCustomerRepository implements CustomerRepositoryInterface {
+class CustomerMockRepository implements CustomerRepositoryInterface
+{
     private array $customers;
 
     public function __construct()
