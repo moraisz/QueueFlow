@@ -2,7 +2,8 @@
 
 namespace Src\Application\Entities;
 
-class CustomerEntity {
+class CustomerEntity
+{
     private ?int $id = null;
     private string $name;
     private ?string $email;
@@ -29,11 +30,32 @@ class CustomerEntity {
         $this->id = $id;
     }
 
-    public function getId(): ?int { return $this->id; }
-    public function getName(): string { return $this->name; }
-    public function getEmail(): ?string { return $this->email; }
-    public function getTelephone(): ?string { return $this->telephone; }
-    public function getPriority(): string { return $this->priority; }
-    public function getType(): string { return $this->type; }
-    public function getStatus(): string { return $this->status; }
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+    public function getName(): string
+    {
+        return $this->name;
+    }
+    public function getEmail(): ?string
+    {
+        return $this->email;
+    }
+    public function getTelephone(): ?string
+    {
+        return $this->telephone;
+    }
+    public function getPriority(): string
+    {
+        return $this->priority;
+    }
+    public function getType(): string
+    {
+        return $this->type;
+    }
+    public function getStatus(): string
+    {
+        return $this->status;
+    }
 }
