@@ -2,13 +2,17 @@
 
 namespace Bootstrap;
 
+use Src\Contracts\Interfaces\Database\DatabaseConnectionInterface;
 use Src\Core\Request;
 use Src\Core\Response;
 use Src\Core\Container;
 use Src\Contracts\Interfaces\Repositories\CustomerRepositoryInterface;
-use Src\Infrastructure\Repositories\CustomerMockRepository;
+use Src\Infrastructure\Database\Connection\PgSqlConnection;
+use Src\Infrastructure\Repositories\CustomerPgSqlRepository;
 use Src\Core\Router;
 use Src\Infrastructure\Routers\CustomerRouter;
+use Src\Contracts\Interfaces\Database\QueryBuilderInterface;
+use Src\Infrastructure\Database\QueryBuilder\SqlQueryBuilder;
 
 class App
 {
@@ -37,7 +41,10 @@ class App
 
     private function configureContainer(): void
     {
-        $this->container->singleton(CustomerRepositoryInterface::class, CustomerMockRepository::class);
+        $this->container->singleton(DatabaseConnectionInterface::class, PgSqlConnection::class);
+        $this->container->singleton(CustomerRepositoryInterface::class, CustomerPgSqlRepository::class);
+
+        $this->container->bind(QueryBuilderInterface::class, SqlQueryBuilder::class);
     }
 
     private function configureRouter(): void

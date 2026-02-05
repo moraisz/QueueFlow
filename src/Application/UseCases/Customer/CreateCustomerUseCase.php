@@ -7,15 +7,17 @@ use Src\Contracts\DTOs\Customer\CustomerCreateDTO;
 use Src\Contracts\DTOs\Customer\CustomerResponseDTO;
 use Src\Contracts\Interfaces\Repositories\CustomerRepositoryInterface;
 
-class CreateCustomerUseCase {
-    
+class CreateCustomerUseCase
+{
     private CustomerRepositoryInterface $customerRepository;
 
-    public function __construct(CustomerRepositoryInterface $customerRepository) {
+    public function __construct(CustomerRepositoryInterface $customerRepository)
+    {
         $this->customerRepository = $customerRepository;
     }
 
-    public function run(CustomerCreateDTO $customerDTO): CustomerResponseDTO {
+    public function run(CustomerCreateDTO $customerDTO): CustomerResponseDTO
+    {
         $customer = new CustomerEntity(
             $customerDTO->name,
             $customerDTO->priority,

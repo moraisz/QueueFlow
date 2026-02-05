@@ -33,10 +33,15 @@ Application to manage queues in real-time with a simple and intuitive interface.
 
 4. Build and run the Docker containers:
     ```bash
-    docker-compose up
+    docker compose up
     ```
 
-5. Access the application in your web browser at:
+5. Execute the database migrations to set up the database schema:
+    ```bash
+    docker compose exec app php bootstrap/migrations.php run
+    ```
+
+6. Access the application in your web browser at:
     ```bash
     localhost:80
     # or
@@ -46,8 +51,9 @@ Application to manage queues in real-time with a simple and intuitive interface.
 
 ## To Do:
 
-- Implement a migration system for database schema changes.
-- Connect to PostgreSQL.
+- Improve SqlQueryBuilder class.
+- Improve code structure and organization.
+- Improve Early Hints usage (before querys).
 - Add user authentication and authorization.
 - See about Mercure in FrankenPHP to real-time.
 - Finish API functionality.
