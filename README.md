@@ -6,12 +6,15 @@ Application to manage queues in real-time with a simple and intuitive interface.
 
 - Frontend/Backend: PHP (Without Framework)
 - Database: PostgreSQL
-- Web Server: FrankenPHP (Using: Worker Mode, Early Hints, HTTP/2)
+- Web Server: FrankenPHP
 - Containerization: Docker
 
 ## Features:
 
 - Can be used like API or Web Application.
+- Worker Mode for better performance.
+- Early Hints to improve loading times.
+- HTTP/2 support.
 
 ## Installation:
 
