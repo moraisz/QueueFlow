@@ -55,8 +55,8 @@ Application to manage queues in real-time with a simple and intuitive interface.
 ## To Do:
 
 - Improve SqlQueryBuilder class.
+- Improve cli.
 - Improve code structure and organization.
-- Improve Early Hints usage (before querys).
 - Add user authentication and authorization.
 - See about Mercure in FrankenPHP to real-time.
 - Finish API functionality.

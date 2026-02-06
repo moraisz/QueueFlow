@@ -34,6 +34,10 @@ class Request
             $request->body = $decoded ?? [];
         }
 
+        if (!$request->isJson()) {
+            $request->startEarlyHints();
+        }
+
         return $request;
     }
     /**
@@ -89,5 +93,12 @@ class Request
     public function isJson(): bool
     {
         return str_contains($this->getHeader('Content-Type') ?? '', 'application/json');
+    }
+
+    public function startEarlyHints(): void
+    {
+        header('Link: </assets/css/style.css>; rel=preload; as=style', false, 103);
+        header('Link: </assets/js/app.js>; rel=preload; as=script', false, 103);
+        \headers_send(103);
     }
 }

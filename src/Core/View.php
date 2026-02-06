@@ -14,8 +14,6 @@ class View
      */
     public static function render(string $viewName, array $data = []): string
     {
-        self::startEarlyHints();
-
         // Reset state
         self::$sections = [];
         self::$currentSection = null;
@@ -38,15 +36,6 @@ class View
 
         // No layout, return view content directly
         return $viewContent;
-    }
-
-    private static function startEarlyHints(): void
-    {
-        if (!headers_sent()) {
-            header('Link: </assets/css/style.css>; rel=preload; as=style', false, 103);
-            header('Link: </assets/js/app.js>; rel=preload; as=script', false, 103);
-            \headers_send(103);
-        }
     }
 
     public static function extends(string $layout): void
