@@ -3,14 +3,14 @@
 namespace Src\Infrastructure\Repositories;
 
 use Src\Application\Entities\CustomerEntity;
-use Src\Contracts\Interfaces\Database\QueryBuilderInterface;
+use Src\Contracts\Interfaces\Database\SqlQueryBuilderInterface;
 use Src\Contracts\Interfaces\Repositories\CustomerRepositoryInterface;
 
 class CustomerPgSqlRepository implements CustomerRepositoryInterface
 {
-    private QueryBuilderInterface $queryBuilder;
+    private SqlQueryBuilderInterface $queryBuilder;
 
-    public function __construct(QueryBuilderInterface $queryBuilder)
+    public function __construct(SqlQueryBuilderInterface $queryBuilder)
     {
         $this->queryBuilder = $queryBuilder;
     }
@@ -20,7 +20,12 @@ class CustomerPgSqlRepository implements CustomerRepositoryInterface
         $query = $this->queryBuilder
             ->select(['*'])
             ->from('customers')
-            ->get();
+            ->where(
+                'status',
+                'NOT IN',
+                ['active']
+            )
+            ->execute();
 
         $customers = [];
         foreach ($query as $row) {
@@ -44,7 +49,7 @@ class CustomerPgSqlRepository implements CustomerRepositoryInterface
             ->select(['*'])
             ->from('customers')
             ->where('id', '=', $id)
-            ->get();
+            ->execute();
 
         $customer = [];
         foreach ($query as $row) {
@@ -65,14 +70,23 @@ class CustomerPgSqlRepository implements CustomerRepositoryInterface
     public function save(CustomerEntity $customer): CustomerEntity
     {
         $query = $this->queryBuilder
-            ->insert('customers', [
-                'name' => $customer->getName(),
-                'priority' => $customer->getPriority(),
-                'type' => $customer->getType(),
-                'status' => $customer->getStatus(),
-                'email' => $customer->getEmail(),
-                'telephone' => $customer->getTelephone(),
-            ]);
+            ->insertInto('customers', [
+                'name',
+                'priority',
+                'type',
+                'status',
+                'email',
+                'telephone'
+            ])
+            ->values([
+                $customer->getName(),
+                $customer->getPriority(),
+                $customer->getType(),
+                $customer->getStatus(),
+                $customer->getEmail(),
+                $customer->getTelephone()
+            ])
+            ->execute();
 
         $customer = [];
         foreach ($query as $row) {

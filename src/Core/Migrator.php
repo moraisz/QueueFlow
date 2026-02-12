@@ -2,15 +2,15 @@
 
 namespace Src\Core;
 
-use Src\Contracts\Interfaces\Database\QueryBuilderInterface;
+use Src\Contracts\Interfaces\Database\SqlQueryBuilderInterface;
 use Src\Infrastructure\Database\Migrations\Migration;
 
 class Migrator
 {
-    private QueryBuilderInterface $queryBuilder;
+    private SqlQueryBuilderInterface $queryBuilder;
     private string $migrationsPath;
 
-    public function __construct(QueryBuilderInterface $queryBuilder)
+    public function __construct(SqlQueryBuilderInterface $queryBuilder)
     {
         $this->queryBuilder = $queryBuilder;
         $this->migrationsPath = __DIR__ . '/../Infrastructure/Database/Migrations';
@@ -19,12 +19,14 @@ class Migrator
 
     private function createMigrationsTable(): void
     {
-        $this->queryBuilder->create('migrations', [
-            'id' => 'SERIAL PRIMARY KEY',
-            'migration' => 'VARCHAR(255) NOT NULL',
-            'batch' => 'INTEGER NOT NULL',
-            'executed_at' => 'TIMESTAMP DEFAULT CURRENT_TIMESTAMP'
-        ]);
+        $this->queryBuilder
+            ->createTable('migrations', [
+                'id' => 'SERIAL PRIMARY KEY',
+                'migration' => 'VARCHAR(255) NOT NULL',
+                'batch' => 'INTEGER NOT NULL',
+                'executed_at' => 'TIMESTAMP DEFAULT CURRENT_TIMESTAMP'
+            ])
+            ->execute();
     }
 
     public function run(): void
@@ -68,7 +70,7 @@ class Migrator
             ->from('migrations')
             ->orderBy('batch', 'DESC')
             ->limit($steps)
-            ->get();
+            ->execute();
 
         if (empty($batches)) {
             echo "Nothing to rollback\n";
@@ -80,7 +82,7 @@ class Migrator
             ->from('migrations')
             ->where('batch', 'IN', array_column($batches, 'batch'))
             ->orderBy('id', 'DESC')
-            ->get();
+            ->execute();
 
         foreach ($migrations as $migration) {
             $file = $this->migrationsPath . '/' . $migration['migration'] . '.php';
@@ -106,7 +108,7 @@ class Migrator
         $result = $this->queryBuilder
             ->select(['migration'])
             ->from('migrations')
-            ->get();
+            ->execute();
 
         return array_column($result, 'migration');
     }
@@ -116,7 +118,7 @@ class Migrator
         $result = $this->queryBuilder
             ->select(['MAX(batch) as batch'])
             ->from('migrations')
-            ->get();
+            ->execute();
 
         return ($result['batch'] ?? 0) + 1;
     }
@@ -124,17 +126,22 @@ class Migrator
     private function logMigration(string $migration, int $batch): void
     {
         $this->queryBuilder
-            ->insert('migrations', [
-                'migration' => $migration,
-                'batch' => $batch
-            ]);
+            ->insertInto('migrations', [
+                'migration',
+                'batch'
+            ])
+            ->values([
+                $migration,
+                $batch
+            ])
+            ->execute();
     }
 
     private function removeMigration(string $migration): void
     {
         $this->queryBuilder
-            ->from('migrations')
+            ->deleteFrom('migrations')
             ->where('migration', '=', $migration)
-            ->delete();
+            ->execute();
     }
 }

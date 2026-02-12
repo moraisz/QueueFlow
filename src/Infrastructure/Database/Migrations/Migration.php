@@ -2,13 +2,13 @@
 
 namespace Src\Infrastructure\Database\Migrations;
 
-use Src\Contracts\Interfaces\Database\QueryBuilderInterface;
+use Src\Contracts\Interfaces\Database\SqlQueryBuilderInterface;
 
 abstract class Migration
 {
-    protected QueryBuilderInterface $queryBuilder;
+    protected SqlQueryBuilderInterface $queryBuilder;
 
-    public function setQueryBuilder(QueryBuilderInterface $queryBuilder): void
+    public function setQueryBuilder(SqlQueryBuilderInterface $queryBuilder): void
     {
         $this->queryBuilder = $queryBuilder;
     }
