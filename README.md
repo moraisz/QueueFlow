@@ -41,7 +41,7 @@ Application to manage queues in real-time with a simple and intuitive interface.
 
 5. Execute the database migrations to set up the database schema:
     ```bash
-    docker compose exec app php bootstrap/migrations.php run
+    docker compose exec app php queuecli migrate run
     ```
 
 6. Access the application in your web browser at:
@@ -54,8 +54,6 @@ Application to manage queues in real-time with a simple and intuitive interface.
 
 ## To Do:
 
-- Improve cli.
-- Improve code structure and organization.
 - Add user authentication and authorization.
 - See about Mercure in FrankenPHP to real-time.
 - Finish API functionality.
