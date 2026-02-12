@@ -20,11 +20,6 @@ class CustomerPgSqlRepository implements CustomerRepositoryInterface
         $query = $this->queryBuilder
             ->select(['*'])
             ->from('customers')
-            ->where(
-                'status',
-                'NOT IN',
-                ['active']
-            )
             ->execute();
 
         $customers = [];
