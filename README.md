@@ -54,7 +54,6 @@ Application to manage queues in real-time with a simple and intuitive interface.
 
 ## To Do:
 
-- Improve SqlQueryBuilder class.
 - Improve cli.
 - Improve code structure and organization.
 - Add user authentication and authorization.
