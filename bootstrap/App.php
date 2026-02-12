@@ -55,7 +55,7 @@ class App
 
     private function runWorkerMode(): void
     {
-        $maxRequests = (int) (getenv('MAX_REQUESTS') ?? 1000);
+        $maxRequests = (int) (getenv('MAX_REQUESTS'));
 
         // main loop to handle requests with FrankenPHP Worker mode
         for ($nbRequests = 0; !$maxRequests || $nbRequests < $maxRequests; ++$nbRequests) {
