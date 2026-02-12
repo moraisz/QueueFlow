@@ -6,13 +6,14 @@ use Src\Contracts\Interfaces\Database\DatabaseConnectionInterface;
 use Src\Core\Request;
 use Src\Core\Response;
 use Src\Core\Container;
+use Src\Core\Migrator;
 use Src\Contracts\Interfaces\Repositories\CustomerRepositoryInterface;
 use Src\Infrastructure\Database\Connection\PgSqlConnection;
 use Src\Infrastructure\Repositories\CustomerPgSqlRepository;
 use Src\Core\Router;
 use Src\Infrastructure\Routers\CustomerRouter;
-use Src\Contracts\Interfaces\Database\QueryBuilderInterface;
-use Src\Infrastructure\Database\QueryBuilder\SqlQueryBuilder;
+use Src\Contracts\Interfaces\Database\SqlQueryBuilderInterface;
+use Src\Infrastructure\Database\QueryBuilder\PgSqlQueryBuilder;
 
 class App
 {
@@ -44,7 +45,7 @@ class App
         $this->container->singleton(DatabaseConnectionInterface::class, PgSqlConnection::class);
         $this->container->singleton(CustomerRepositoryInterface::class, CustomerPgSqlRepository::class);
 
-        $this->container->bind(QueryBuilderInterface::class, SqlQueryBuilder::class);
+        $this->container->bind(SqlQueryBuilderInterface::class, PgSqlQueryBuilder::class);
     }
 
     private function configureRouter(): void
@@ -95,5 +96,41 @@ class App
 
             $errorResponse->send();
         }
+    }
+
+    public function handleCommand(): int
+    {
+        global $argv;
+
+        if (!isset($argv[1])) {
+            echo "No command provided\n";
+            return 1;
+        }
+
+        if ($argv[1] === 'migrate') {
+            $container = new Container();
+            $container->singleton(DatabaseConnectionInterface::class, PgSqlConnection::class);
+            $container->bind(SqlQueryBuilderInterface::class, PgSqlQueryBuilder::class);
+            $migrator = $container->make(Migrator::class);
+
+            if (isset($argv[2]) && $argv[2] === 'run') {
+                echo "Running migrations...\n";
+                $migrator->run();
+                return 0;
+            }
+
+            if (isset($argv[2]) && $argv[2] === 'rollback') {
+                echo "Rolling back migrations...\n";
+                $steps = (int)($argv[2] ?? 1);
+                $migrator->rollback($steps);
+                return 0;
+            }
+
+            echo "Unknown migrate command...\n";
+            return 1;
+        }
+
+        echo "Unknown command: {$argv[1]}\n";
+        return 1;
     }
 }
