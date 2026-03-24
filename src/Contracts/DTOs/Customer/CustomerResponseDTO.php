@@ -3,8 +3,10 @@
 namespace Src\Contracts\DTOs\Customer;
 
 use Src\Application\Entities\CustomerEntity;
+use Src\Contracts\DTOs\DTO;
+use Src\Core\Request;
 
-class CustomerResponseDTO
+class CustomerResponseDTO extends DTO
 {
     public function __construct(
         public readonly int $id,
@@ -27,6 +29,19 @@ class CustomerResponseDTO
             priority: $entity->getPriority(),
             type: $entity->getType(),
             status: $entity->getStatus()
+        );
+    }
+
+    public static function fromRequest(Request $request): self
+    {
+        return new self(
+            id: (int) $request->getBody('id'),
+            name: $request->getBody('name'),
+            email: $request->getBody('email'),
+            telephone: $request->getBody('telephone'),
+            priority: $request->getBody('priority'),
+            type: $request->getBody('type'),
+            status: $request->getBody('status')
         );
     }
 }

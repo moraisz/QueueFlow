@@ -1,6 +1,6 @@
 <?php
 
-namespace Src\Infrastructure\Repositories;
+namespace Src\Infrastructure\Repositories\Customer;
 
 use Src\Application\Entities\CustomerEntity;
 use Src\Contracts\Interfaces\Database\SqlQueryBuilderInterface;
@@ -83,9 +83,9 @@ class CustomerPgSqlRepository implements CustomerRepositoryInterface
             ])
             ->execute();
 
-        $customer = [];
+        $customerData = [];
         foreach ($query as $row) {
-            $customer[] = new CustomerEntity(
+            $customerData[] = new CustomerEntity(
                 $row['name'],
                 $row['priority'],
                 $row['type'],
@@ -96,6 +96,6 @@ class CustomerPgSqlRepository implements CustomerRepositoryInterface
             );
         }
 
-        return $customer[0];
+        return $customerData[0];
     }
 }

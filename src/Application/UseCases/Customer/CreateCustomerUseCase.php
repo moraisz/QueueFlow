@@ -16,7 +16,10 @@ class CreateCustomerUseCase
         $this->customerRepository = $customerRepository;
     }
 
-    public function run(CustomerCreateDTO $customerDTO): CustomerResponseDTO
+    /**
+     * @return array<int,CustomerResponseDTO>
+     */
+    public function run(CustomerCreateDTO $customerDTO): array
     {
         $customer = new CustomerEntity(
             $customerDTO->name,
@@ -30,6 +33,6 @@ class CreateCustomerUseCase
 
         $customer = $this->customerRepository->save($customer);
 
-        return CustomerResponseDTO::fromEntity($customer);
+        return [CustomerResponseDTO::fromEntity($customer)];
     }
 }

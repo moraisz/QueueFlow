@@ -15,14 +15,13 @@ class GetCustomersUseCase
     }
 
     /**
-     * @return CustomerResponseDTO[]
+     * @return array<int,CustomerResponseDTO>
      */
     public function run(): array
     {
         $customersEntities = $this->customerRepository->getAll();
 
         $customers = [];
-
         foreach ($customersEntities as $customerEntity) {
             $customers[] = CustomerResponseDTO::fromEntity($customerEntity);
         }

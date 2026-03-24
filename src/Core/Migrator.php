@@ -3,7 +3,7 @@
 namespace Src\Core;
 
 use Src\Contracts\Interfaces\Database\SqlQueryBuilderInterface;
-use Src\Infrastructure\Database\Migrations\Migration;
+use Src\Contracts\AbstractClasses\Migration;
 
 class Migrator
 {
@@ -68,9 +68,13 @@ class Migrator
         $batches = $this->queryBuilder
             ->select(['DISTINCT batch'])
             ->from('migrations')
-            ->orderBy('batch', 'DESC')
-            ->limit($steps)
-            ->execute();
+            ->orderBy('batch', 'DESC');
+
+        if ($steps > 0) {
+            $batches->limit($steps);
+        }
+
+        $batches = $batches->execute();
 
         if (empty($batches)) {
             echo "Nothing to rollback\n";

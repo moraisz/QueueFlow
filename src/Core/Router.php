@@ -94,7 +94,9 @@ class Router
                     // If [Controller::class, 'method']
                     [$controllerClass, $methodName] = $route['callback'];
                     $controller = $this->container->make($controllerClass);
-                    $result = $controller->$methodName($request, $response);
+                    $controller->setRequest($request);
+                    $controller->setResponse($response);
+                    $result = $controller->$methodName();
 
                     // If the callback returned a Response, use it
                     if ($result instanceof Response) {

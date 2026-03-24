@@ -1,6 +1,6 @@
 <?php
 
-namespace Src\Infrastructure\Database\Migrations;
+namespace Src\Core\AbstractClasses;
 
 use Src\Contracts\Interfaces\Database\SqlQueryBuilderInterface;
 

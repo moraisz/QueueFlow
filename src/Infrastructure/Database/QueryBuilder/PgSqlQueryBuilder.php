@@ -248,7 +248,7 @@ class PgSqlQueryBuilder implements SqlQueryBuilderInterface
                 $placeholders = implode(', ', array_fill(0, count($values), '?'));
                 $valueGroups[] = "({$placeholders})";
             }
-            $sql .= ' ' . implode(', ', $valueGroups);
+            $sql .= ' ' . implode(', ', $valueGroups) . ' RETURNING *';
         }
 
         if ($this->createTable && !empty($this->createColumns)) {

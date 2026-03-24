@@ -9,11 +9,12 @@ use Src\Core\Container;
 use Src\Core\Migrator;
 use Src\Contracts\Interfaces\Repositories\CustomerRepositoryInterface;
 use Src\Infrastructure\Database\Connection\PgSqlConnection;
-use Src\Infrastructure\Repositories\CustomerPgSqlRepository;
+use Src\Infrastructure\Repositories\Customer\CustomerPgSqlRepository;
 use Src\Core\Router;
 use Src\Infrastructure\Routers\CustomerRouter;
 use Src\Contracts\Interfaces\Database\SqlQueryBuilderInterface;
 use Src\Infrastructure\Database\QueryBuilder\PgSqlQueryBuilder;
+use Src\Infrastructure\Routers\HomeRouter;
 
 class App
 {
@@ -43,14 +44,15 @@ class App
     private function configureContainer(): void
     {
         $this->container->singleton(DatabaseConnectionInterface::class, PgSqlConnection::class);
-        $this->container->singleton(CustomerRepositoryInterface::class, CustomerPgSqlRepository::class);
 
+        $this->container->bind(CustomerRepositoryInterface::class, CustomerPgSqlRepository::class);
         $this->container->bind(SqlQueryBuilderInterface::class, PgSqlQueryBuilder::class);
     }
 
     private function configureRouter(): void
     {
         CustomerRouter::register($this->router);
+        HomeRouter::register($this->router);
     }
 
     private function runWorkerMode(): void

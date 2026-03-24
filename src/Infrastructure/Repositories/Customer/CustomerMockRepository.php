@@ -1,6 +1,6 @@
 <?php
 
-namespace Src\Infrastructure\Repositories;
+namespace Src\Infrastructure\Repositories\Customer;
 
 use Src\Application\Entities\CustomerEntity;
 use Src\Contracts\Interfaces\Repositories\CustomerRepositoryInterface;

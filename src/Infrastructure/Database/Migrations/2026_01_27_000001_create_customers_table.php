@@ -2,11 +2,15 @@
 
 namespace Src\Infrastructure\Database\Migrations;
 
+use Src\Core\AbstractClasses\Migration;
+
 return new class extends Migration {
+    private string $tableName = 'customers';
+
     public function up(): void
     {
         $this->queryBuilder
-            ->createTable('customers', [
+            ->createTable($this->tableName, [
                 'id' => 'SERIAL PRIMARY KEY',
                 'name' => 'VARCHAR(100) NOT NULL',
                 'email' => 'VARCHAR(100) UNIQUE NOT NULL',
@@ -22,7 +26,7 @@ return new class extends Migration {
     public function down(): void
     {
         $this->queryBuilder
-            ->dropTable('customers')
+            ->dropTable($this->tableName)
             ->execute();
     }
 };

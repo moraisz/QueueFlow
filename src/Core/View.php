@@ -8,6 +8,7 @@ class View
     private static ?string $layout = null;
     private static array $sections = [];
     private static ?string $currentSection = null;
+    private static array $data = [];
 
     /**
      * @param array<int,mixed> $data
@@ -15,11 +16,10 @@ class View
     public static function render(string $viewName, array $data = []): string
     {
         // Reset state
-        self::$sections = [];
-        self::$currentSection = null;
-        self::$layout = null;
+        self::reset();
 
         // Extract data to variables
+        self::$data = $data;
         extract($data, EXTR_SKIP);
 
         // Include the view file
@@ -29,6 +29,7 @@ class View
 
         // If view extends a layout, render layout with sections
         if (self::$layout) {
+            extract(self::$data, EXTR_SKIP);
             ob_start();
             include self::$viewsPath . '/' . self::$layout . '.php';
             return ob_get_clean();
@@ -65,5 +66,30 @@ class View
     public static function getLayout(): string
     {
         return self::$layout;
+    }
+
+    /**
+     * Escape HTML safely
+     */
+    public static function e(mixed $value): string
+    {
+        return htmlspecialchars((string)$value, ENT_QUOTES, 'UTF-8');
+    }
+
+    /**
+     * Include sub-view/component
+     */
+    public static function include(string $component, array $data = []): void
+    {
+        extract($data, EXTR_SKIP);
+        include self::$viewsPath . '/' . $component . '.php';
+    }
+
+    private static function reset(): void
+    {
+        self::$sections = [];
+        self::$currentSection = null;
+        self::$layout = null;
+        self::$data = [];
     }
 }

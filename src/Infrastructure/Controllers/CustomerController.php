@@ -2,16 +2,15 @@
 
 namespace Src\Infrastructure\Controllers;
 
-use Src\Core\Request;
+use Src\Core\AbstractClasses\Controller;
 use Src\Core\Response;
-use Src\Core\View;
 use Src\Contracts\Interfaces\Repositories\CustomerRepositoryInterface;
 use Src\Application\UseCases\Customer\CreateCustomerUseCase;
 use Src\Application\UseCases\Customer\GetCustomerByIdUseCase;
 use Src\Application\UseCases\Customer\GetCustomersUseCase;
 use Src\Contracts\DTOs\Customer\CustomerCreateDTO;
 
-class CustomerController
+class CustomerController extends Controller
 {
     private CustomerRepositoryInterface $customerRepository;
 
@@ -20,76 +19,51 @@ class CustomerController
         $this->customerRepository = $customerRepository;
     }
 
-    public function get(Request $request, Response $response): Response
+    public function get(): Response
     {
         $customerUseCase = new GetCustomersUseCase($this->customerRepository);
         $customers = $customerUseCase->run();
 
-        if ($request->isJson()) {
-            return $response->json($customers ?? [], $customers ? 200 : 404);
+        if ($this->request->isJson()) {
+            return $this->jsonResponse($customers ?? [], $customers ? 200 : 404);
         }
 
-        $html = View::render('pages/customers', [
+        return $this->renderView('pages/customers', [
             'customers' => $customers,
             'message' => 'Bem-vindo!',
             'title' => 'Perfil do Cliente',
         ]);
-
-        return $response->html($html, 200);
     }
 
-    public function getUnique(Request $request, Response $response): Response
+    public function getUnique(): Response
     {
         $customerUseCase = new GetCustomerByIdUseCase($this->customerRepository);
-        $id = (int) $request->getParam('id');
+        $id = (int) $this->request->getParam('id');
         $customer = $customerUseCase->run($id);
 
-        if ($request->isJson()) {
-            return $response->json($customer ?? [], $customer ? 200 : 404);
+        if ($this->request->isJson()) {
+            return $this->jsonResponse($customer ?? [], $customer ? 200 : 404);
         }
-
-        $html = View::render('pages/customers', [
-            'customer' => $customer,
-            'message' => 'Bem-vindo!',
-            'title' => 'Perfil do Cliente',
-        ]);
-
-        return $response->html($html, 200);
     }
 
-    public function post(Request $request, Response $response): Response
+    public function post(): Response
     {
         $customerUseCase = new CreateCustomerUseCase($this->customerRepository);
-        $customerDTO = new CustomerCreateDTO(
-            $request->getBody('name'),
-            $request->getBody('priority'),
-            $request->getBody('type'),
-            $request->getBody('status'),
-            $request->getBody('email'),
-            $request->getBody('telephone'),
-        );
-        $customer = $customerUseCase->run($customerDTO);
+        $customerCreateDTO = CustomerCreateDTO::fromRequest($this->request);
+        $customer = $customerUseCase->run($customerCreateDTO);
 
-        if ($request->isJson()) {
-            return $response->json($customer ?? [], $customer ? 200 : 404);
+        if ($this->request->isJson()) {
+            return $this->jsonResponse($customer ?? [], $customer ? 200 : 404);
         }
-
-        $html = View::render('pages/customers', [
-            'user' => $customer,
-            'message' => 'Bem-vindo!',
-            'title' => 'Perfil do Cliente',
-        ]);
-
-        return $response->html($html, 200);
     }
 
-    public function put(Request $request, Response $response): Response
+    public function put(): Response
     {
-        return $response;
+        return $this->response;
     }
 
-    public function delete(Request $request, Response $response): Response
+    public function delete(): Response
     {
-        return $response;
+        return $this->response;
     }
 }
